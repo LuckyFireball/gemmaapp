@@ -14,20 +14,31 @@ class ChatbotApi:
             payload = {
                 "model": "gemma2-9b-it",
                 "messages": [{"role": "user", "content": message}],
-                "stream": False,
+                "stream": False
             }
+            
+            # Reads the secure variable passed down by the build environment
+            api_key = os.environ.get("GROQ_API_KEY", "YOUR_LOCAL_TEST_KEY_HERE")
+            
             headers = {
-                "Authorization": "Bearer gsk_yG6B2V7fR6zK8wQ9xJ3pWGdyb3FYM3k5bDdSc0FvMjhVcXpM",
-                "Content-Type": "application/json",
+                "Authorization": f"Bearer {api_key}",
+                "Content-Type": "application/json"
             }
+            
             res = requests.post(
                 "https://groq.com",
                 json=payload,
                 headers=headers,
+                timeout=10
             )
-            return {"response": res.json()["choices"][0]["message"]["content"]}
+            
+            if res.status_code == 200:
+                return {"response": res.json()["choices"]["message"]["content"]}
+            else:
+                return {"response": f"Server responded with error code: {res.status_code}"}
+                
         except Exception as e:
-            return {"response": "Could not connect to the online server."}
+            return {"response": f"Connection error: {str(e)}"}
 
 html_path = get_asset_path("index.html")
 
