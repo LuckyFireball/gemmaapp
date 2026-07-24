@@ -22,15 +22,16 @@ jobs:
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pyinstaller requests pywebview pyobjc-framework-Cocoa pyobjc-framework-WebKit
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install requests pywebview
 
-      - name: Build macOS App Bundle
+      - name: Zip Mac Portable Build
         run: |
-          pyinstaller --noconsole --onefile --windowed --add-data "index.html:." --add-data "style.css:." --add-data "script.js:." main.py
+          mkdir ChippyApp
+          cp main.py index.html style.css script.js ChippyApp/
+          zip -r Mac-Application.zip ChippyApp
 
       - name: Upload Finished App
         uses: actions/upload-artifact@v4
         with:
           name: Mac-Application
-          path: dist/
+          path: Mac-Application.zip
