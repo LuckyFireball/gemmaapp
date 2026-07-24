@@ -47,4 +47,4 @@ if __name__ == "__main__":
     window = webview.create_window(
         "Gemma AI Space", html_path, js_api=api, width=1000, height=650
     )
-    webview.start()
+     webview.start(debug=True)
