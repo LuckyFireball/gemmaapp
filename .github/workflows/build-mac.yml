@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: macos-14
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -22,7 +22,7 @@ jobs:
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pyinstaller requests pywebview pyobjc-framework-Cocoa pyobjc-framework-WebKit
+          pip install pyinstaller requests pywebview
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
       - name: Build macOS App Bundle
