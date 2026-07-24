@@ -1,17 +1,11 @@
 import os
 import sys
-
-def get_asset_path(relative_path):
-    """ Get absolute path to resource, works for dev and for PyInstaller """
-    base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
-    return os.path.join(base_path, relative_path)
-
-
-import os
-import sys
 import requests
 import webview
 
+def get_asset_path(relative_path):
+    base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+    return os.path.join(base_path, relative_path)
 
 class ChatbotApi:
 
@@ -31,17 +25,11 @@ class ChatbotApi:
                 json=payload,
                 headers=headers,
             )
-            return {"response": res.json()["choices"]["message"]["content"]}
+            return {"response": res.json()["choices"][0]["message"]["content"]}
         except Exception as e:
             return {"response": "Could not connect to the online server."}
 
-
-if getattr(sys, "frozen", False):
-    base_path = sys._MEIPASS
-else:
-    base_path = os.path.dirname(os.path.abspath(__file__))
-
-html_path = os.path.join(base_path, "index.html")
+html_path = get_asset_path("index.html")
 
 if __name__ == "__main__":
     api = ChatbotApi()
